@@ -74,9 +74,9 @@ if task_done_count == '0':
     print u'进行泡泡积分……'
     click_button = task_element.find_element_by_xpath('.//a[contains(@class,"j-task-paopao")]')
     if click_button.text.strip() == u'去逛逛':
-        browser.execute_script('argument[0].setAttribute("data-pao-rewardcount","1")', click_button)
+        click_button.click()
+        browser.switch_to.window(window_handle)
     click_button.click()
-    browser.switch_to.window(window_handle)
     time.sleep(1)
     task_done_count = task_element.find_element_by_xpath('.//span[contains(@class,"score-task-done-num")]').text
     if task_done_count == '1':
