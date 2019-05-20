@@ -5,11 +5,9 @@ import os
 import time
 
 options = Options()
-# options.add_argument('--headless')
+options.add_argument('--headless')
 options.add_argument('--user-data-dir=D:\\user_data')
-
-
-# options.add_argument('--window-size=1366,768')
+options.add_argument('--window-size=1366,768')
 
 # 查看是否已经登录，没有登录的话在生成login.png进行扫码登录
 def login():
@@ -36,6 +34,7 @@ def browser_close():
 
 browser = webdriver.Chrome(executable_path='chromedriver.exe', chrome_options=options, service_log_path='web.log',
                            service_args=['--verbose', '--log-path=web.log'])
+
 
 if login() == 0:
     print u'登录失败，退出'
@@ -106,5 +105,25 @@ elif task_text == u'领取':
 else:
     print u'俱乐部积分已经完成'
 
+
+browser.set_network_conditions(
+    offline=False,
+    latency=5,  # additional latency (ms)
+    download_throughput=1000*1024,
+    upload_throughput=10)  # maximal throughput
+browser.get('https://www.iqiyi.com/v_19rrk40ajc.html')
+browser.set_network_conditions(
+    offline=False,
+    latency=5,  # additional latency (ms)
+    download_throughput=1000*1024,
+    upload_throughput=10)  # maximal throughput
+time.sleep(60*60)
+browser.get('https://www.iqiyi.com/v_19rrj6ukg4.html')
+browser.set_network_conditions(
+    offline=False,
+    latency=5,  # additional latency (ms)
+    download_throughput=1000*1024,
+    upload_throughput=10)  # maximal throughput
+time.sleep(60*70)
 
 browser_close()
