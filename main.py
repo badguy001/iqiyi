@@ -6,13 +6,16 @@ import time
 
 options = Options()
 options.add_argument('--headless')
-options.add_argument('--user-data-dir=D:\\user_data')
+options.add_argument('--user-data-dir=/root/user_data')
 options.add_argument('--window-size=1366,768')
+options.add_argument('--no-sandbox')
 
 # 查看是否已经登录，没有登录的话在生成login.png进行扫码登录
 def login():
     png_name = 'login.png'
     browser.get('https://www.iqiyi.com/u/point')
+    #browser.get('https://www.baidu.com')
+    #browser.get_screenshot_as_file('test.png')
     if browser.current_url != 'https://www.iqiyi.com/u/point':
         if os.path.exists(png_name):
             os.remove(png_name)
@@ -31,8 +34,9 @@ def browser_close():
     browser.close()
     browser.quit()
 
+gkcs = 0
 
-browser = webdriver.Chrome(executable_path='chromedriver.exe', chrome_options=options, service_log_path='web.log',
+browser = webdriver.Chrome(executable_path='/root/iqiyi/chromedriver', chrome_options=options, service_log_path='web.log',
                            service_args=['--verbose', '--log-path=web.log'])
 
 
@@ -88,7 +92,7 @@ else:
 task_element = browser.find_element_by_class_name('score-task-watch-box')
 task_done_count = task_element.find_element_by_xpath('.//span[contains(@class,"score-task-done-num")]').text
 print u'视频积分完成' + task_done_count + u'次'
-
+gkcs = task_done_count
 
 browser.get('https://vip.iqiyi.com/pcw_task.html')
 task_element = browser.find_element_by_xpath('//li[contains(@class,"j_task_vipClub")]')
@@ -105,25 +109,25 @@ elif task_text == u'领取':
 else:
     print u'俱乐部积分已经完成'
 
-
-browser.set_network_conditions(
-    offline=False,
-    latency=5,  # additional latency (ms)
-    download_throughput=1000*1024,
-    upload_throughput=10)  # maximal throughput
-browser.get('https://www.iqiyi.com/v_19rrk40ajc.html')
-browser.set_network_conditions(
-    offline=False,
-    latency=5,  # additional latency (ms)
-    download_throughput=1000*1024,
-    upload_throughput=10)  # maximal throughput
-time.sleep(60*60)
-browser.get('https://www.iqiyi.com/v_19rrj6ukg4.html')
-browser.set_network_conditions(
-    offline=False,
-    latency=5,  # additional latency (ms)
-    download_throughput=1000*1024,
-    upload_throughput=10)  # maximal throughput
-time.sleep(60*70)
+if gkcs < 3:
+    browser.set_network_conditions(
+        offline=False,
+        latency=5,  # additional latency (ms)
+        download_throughput=1000*1024,
+        upload_throughput=10)  # maximal throughput
+    browser.get('https://www.iqiyi.com/v_19rrk40ajc.html')
+    browser.set_network_conditions(
+        offline=False,
+        latency=5,  # additional latency (ms)
+        download_throughput=1000*1024,
+        upload_throughput=10)  # maximal throughput
+    time.sleep(60*60)
+    browser.get('https://www.iqiyi.com/v_19rrj6ukg4.html')
+    browser.set_network_conditions(
+        offline=False,
+        latency=5,  # additional latency (ms)
+        download_throughput=1000*1024,
+        upload_throughput=10)  # maximal throughput
+    time.sleep(60*70)
 
 browser_close()
